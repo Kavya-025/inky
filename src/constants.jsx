@@ -19,3 +19,5 @@ export const BOARD_ACTIONS = {
     DRAW_UP: "DRAW_UP",
     DRAW_MOVE: "DRAW_MOVE",
 }
+
+export const ARROW_LENGTH = 20;

@@ -4,6 +4,7 @@ import cx from "classnames";
 import { LuRectangleHorizontal } from "react-icons/lu";
 import { FaSlash } from "react-icons/fa6";
 import { FaRegCircle } from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
 import boardContext from '../../store/board-context';
 import { TOOL_ITEMS } from '../../constants';
 
@@ -37,6 +38,16 @@ const Toolbar = () => {
       >
         <FaRegCircle />
       </div>
+
+      <div 
+        className= {
+          cx(classes.toolItem, {[classes.active]: ActiveToolItem === TOOL_ITEMS.ARROW})
+        }
+        onClick={() => handleToolItemClick(TOOL_ITEMS.ARROW)}
+      >
+        <FaArrowRightLong />
+      </div>
+
     </div>
   )
 }
