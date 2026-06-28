@@ -11,6 +11,8 @@ export const TOOL_ITEMS={
 export const TOOL_ACTION_TYPES = {
     NONE: "NONE",
     DRAWING: "DRAWING",
+    ERASING : "ERASING",
+    WRITTING: "WRITTING",
 }
 
 export const BOARD_ACTIONS = {
@@ -18,6 +20,11 @@ export const BOARD_ACTIONS = {
     DRAW_DOWN: "DRAW_DOWN",
     DRAW_UP: "DRAW_UP",
     DRAW_MOVE: "DRAW_MOVE",
+    ERASE: "ERASE",
+    CHNAGE_ACTION_TYPE: "CHNAGE_ACTION_TYPE",
+    CHANGE_TEXT: "CHANGE_TEXT", 
+    UNDO: "UNDO",
+    REDO: "REDO",
 }
 
 export const ARROW_LENGTH = 20;
@@ -41,10 +48,12 @@ export const TOOLBOX_ACTIONS={
 export const FILL_TOOL_TYPES = [TOOL_ITEMS.RECTANGLE, TOOL_ITEMS.CIRCLE];
 
 export const STROKE_TOOL_TYPES = [
+    TOOL_ITEMS.BRUSH,
     TOOL_ITEMS.RECTANGLE, 
     TOOL_ITEMS.CIRCLE, 
     TOOL_ITEMS.ARROW,
     TOOL_ITEMS.LINE,
+    TOOL_ITEMS.TEXT,
 ];
 
 export const SIZE_TOOL_TYPES = [
@@ -52,4 +61,7 @@ export const SIZE_TOOL_TYPES = [
     TOOL_ITEMS.CIRCLE, 
     TOOL_ITEMS.ARROW,
     TOOL_ITEMS.LINE,
-]
+    TOOL_ITEMS.TEXT,
+];
+
+export const ELEMENT_ERASE_THRESHOLD = 0.1;

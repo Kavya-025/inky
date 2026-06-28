@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import classes from "./index.module.css";
 import toolboxContext from '../../store/toolbox-context';
-import { COLORS, FILL_TOOL_TYPES, STROKE_TOOL_TYPES,SIZE_TOOL_TYPES } from '../../constants';
+import { COLORS, FILL_TOOL_TYPES, STROKE_TOOL_TYPES,SIZE_TOOL_TYPES, TOOL_ITEMS } from '../../constants';
 import cx from "classnames";
 import boardContext from '../../store/board-context';
 
@@ -20,6 +20,14 @@ const Toolbox = () => {
         { STROKE_TOOL_TYPES.includes(ActiveToolItem) && <div className={classes.selectOptionContainer}>
             <div className={classes.toolBoxLabel}>Stroke Color</div>
             <div className= {classes.colorsContainer}>
+                <div>
+                <input
+                    className={classes.colorPicker}
+                    type="color"
+                    value={strokeColor}
+                    onChange={(e) => changeStroke(ActiveToolItem, e.target.value)}
+                ></input>
+                </div>
                 {Object.keys(COLORS).map((k)=>{
                     return <div key={k} className= {cx(classes.colorBox, {
                         [classes.activeColorBox]: strokeColor === COLORS[k]})}
@@ -29,9 +37,31 @@ const Toolbox = () => {
                 })}
             </div>
         </div>}
-        {FILL_TOOL_TYPES.includes(ActiveToolItem)&& <div className={classes.selectOptionContainer}>
+        {FILL_TOOL_TYPES.includes(ActiveToolItem)&& <div className={classes.selectOptionContainer} >
             <div className={classes.toolBoxLabel}>Fill color</div>
             <div className= {classes.colorsContainer}>
+                {fillColor === null ? (
+              <div
+                className={cx(classes.colorPicker, classes.noFillColorBox)}
+                onClick={() => changeFill(ActiveToolItem, COLORS.BLACK)}
+              ></div>
+            ) : (
+              <div>
+                <input
+                  className={classes.colorPicker}
+                  type="color"
+                  value={strokeColor}
+                  onChange={(e) => changeFill(ActiveToolItem, e.target.value)}
+                ></input>
+              </div>
+            )}
+            <div
+              className={cx(classes.colorBox, classes.noFillColorBox, {
+                [classes.activeColorBox]: fillColor === null,
+              })}
+              onClick={() => changeFill(ActiveToolItem, null)}
+            ></div>
+                
                 {Object.keys(COLORS).map((k)=>{
                     return <div key={k} className= {cx(classes.colorBox, {
                         [classes.activeColorBox]: fillColor === COLORS[k]})}
@@ -42,11 +72,12 @@ const Toolbox = () => {
             </div>
         </div>}
         {SIZE_TOOL_TYPES.includes(ActiveToolItem)&& <div className={classes.selectOptionContainer}>
-            <div className={classes.toolBoxLabel}>Brush color</div>
+            <div className={classes.toolBoxLabel}>
+                {ActiveToolItem === TOOL_ITEMS.TEXT? "Font size": "Brush color"}</div>
                 <input
                 type="range"
-                min={1}
-                max={10}
+                min={ActiveToolItem === TOOL_ITEMS.TEXT?16:1}
+                max={ActiveToolItem === TOOL_ITEMS.TEXT?30:10}
                 step={1}
                 value={size}
                 onChange={(event) => changeSize(ActiveToolItem,Number(event.target.value))}

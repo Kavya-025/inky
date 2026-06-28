@@ -4,6 +4,7 @@ import { COLORS, TOOL_ITEMS, TOOLBOX_ACTIONS } from '../constants';
 
 function toolboxReducer (state, action){
     switch (action.type) {
+
         case TOOLBOX_ACTIONS.CHANGE_STROKE:{
             const newState = {...state};
             newState[action.payload.tool].stroke = action.payload.stroke;
@@ -29,6 +30,9 @@ function toolboxReducer (state, action){
 }
 
 const initialToolboxState = {
+    [TOOL_ITEMS.BRUSH]:{
+        stroke: COLORS.BLACK,
+    },
     [TOOL_ITEMS.LINE]: {
         stroke: COLORS.BLACK,               
         size: 1,
@@ -46,6 +50,10 @@ const initialToolboxState = {
     [TOOL_ITEMS.ARROW]: {
         stroke: COLORS.BLACK,
         size: 1,
+    },
+    [TOOL_ITEMS.TEXT]: {
+        stroke: COLORS.BLACK,
+        size: 16,
     },
 }
 
