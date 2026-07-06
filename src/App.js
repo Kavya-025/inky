@@ -1,20 +1,19 @@
-import './App.css';
-import Board from './components/Board';
-import Toolbar from './components/toolbar';
-import Toolbox from './components/toolbox';
-import BoardProvider from './store/boardProvider';
-import ToolboxProvider from './store/toolbox-context-provider';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import CanvasPage from "./pages/canvas";
+import RegisterUser from "./pages/registerUser";
 
 function App() {
   return (
-    <BoardProvider>
-      <ToolboxProvider>
-        <Toolbar/>
-        <Board/>
-        <Toolbox/>
-      </ToolboxProvider>
-    </BoardProvider>
-    
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterUser />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/canvas/:id" element={<CanvasPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

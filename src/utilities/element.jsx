@@ -95,9 +95,14 @@ export const isPointNearElement = (element, pointX, pointY)=>{
                 isPointCloseToLine(x2, y2, x1, y2, pointX, pointY) ||
                 isPointCloseToLine(x1, y2, x1, y1, pointX, pointY)
             );
-        case TOOL_ITEMS.BRUSH:{
+            case TOOL_ITEMS.BRUSH: {
                 const context = document.getElementById("canvas").getContext("2d");
-                return context.isPointInPath(element.path, pointX,pointY);
+
+                const path = new Path2D(
+                    getSvgPathFromStroke(getStroke(element.points))
+                );
+
+                return context.isPointInPath(path, pointX, pointY);
             }
             case TOOL_ITEMS.TEXT:{
                 const context = document.getElementById("canvas").getContext("2d");

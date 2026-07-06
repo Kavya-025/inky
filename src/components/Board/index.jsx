@@ -5,6 +5,12 @@ import { TOOL_ACTION_TYPES, TOOL_ITEMS } from '../../constants';
 import toolboxContext from '../../store/toolbox-context';
 import classes from "./index.module.css";
 
+import getStroke from "perfect-freehand";
+import { getSvgPathFromStroke } from "../../utilities/element";
+
+import { updateCanvas } from '../../utilities/api';
+
+import socket from "../../utilities/socket";
 
 function Board() {
   const canvasRef = useRef();
@@ -18,6 +24,7 @@ function Board() {
     redo
   } = 
   useContext(boardContext);
+  
 
   const {toolboxState} = useContext(toolboxContext)
   const textAreaRef =  useRef();
@@ -42,6 +49,23 @@ function Board() {
     }
   }, [undo, redo])
 
+  useEffect(() => {
+    if (!elements.length) return;
+    const canvasId = window.location.pathname.split("/")[2];
+    const syncCanvas = async () => {
+        try {
+            await updateCanvas(canvasId, elements);
+            socket.emit("drawingUpdate", {
+                canvasId,
+                elements,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    syncCanvas();
+}, [elements]);
+
   useLayoutEffect (()=>{
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -57,11 +81,16 @@ function Board() {
         roughCanvas.draw(element.roughEle);
         break;
 
-        case TOOL_ITEMS.BRUSH:
-          context.fillStyle = element.stroke;
-          context.fill(element.path);
-          context.restore();
-          break;
+        case TOOL_ITEMS.BRUSH: {
+            const path = new Path2D(
+                getSvgPathFromStroke(getStroke(element.points))
+            );
+
+            context.fillStyle = element.stroke;
+            context.fill(path);
+            context.restore();
+            break;
+        }
 
         case TOOL_ITEMS.TEXT:
           context.textBaseline = "top";
@@ -101,9 +130,9 @@ function Board() {
     boardMouseMoveHandler(event);
   }
 
-  const handleMouseUp = ()=>{
+  const handleMouseUp = () => {
     boardMouseUpHandler();
-  }
+};
 
   return(
     <>
