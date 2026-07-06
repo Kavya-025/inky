@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const mongoose = require('mongoose');
 const dns = require('dns');
 
@@ -10,11 +12,11 @@ dns.setServers([
 const username = 'user';
 const password = 'whiteboard';
 
-const url = `mongodb+srv://${username}:${password}@cluster0.dldikcz.mongodb.net/inky?retryWrites=true&w=majority&appName=Cluster0`;
+// const url = `mongodb+srv://${username}:${password}@cluster0.dldikcz.mongodb.net/inky?retryWrites=true&w=majority&appName=Cluster0`;
 
 const connectToDatabase = async () => {
     try { 
-        await mongoose.connect(url);
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to the database');
     } catch (err) {
         console.error('Error connecting to the database:');
