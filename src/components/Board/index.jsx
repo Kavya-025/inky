@@ -21,7 +21,8 @@ function Board() {
     toolActionType,
     textAreaBlurHandler, 
     undo,
-    redo
+    redo,
+    remoteUpdateRef,
   } = 
   useContext(boardContext);
   
@@ -50,21 +51,33 @@ function Board() {
   }, [undo, redo])
 
   useEffect(() => {
+
+    if (remoteUpdateRef.current) {
+        remoteUpdateRef.current = false;
+        return;
+    }
+
     if (!elements.length) return;
+
     const canvasId = window.location.pathname.split("/")[2];
+
     const syncCanvas = async () => {
         try {
             await updateCanvas(canvasId, elements);
+
             socket.emit("drawingUpdate", {
                 canvasId,
                 elements,
             });
+
         } catch (error) {
             console.error(error);
         }
     };
+
     syncCanvas();
-}, [elements]);
+
+}, [elements, remoteUpdateRef]);
 
   useLayoutEffect (()=>{
     const canvas = canvasRef.current;

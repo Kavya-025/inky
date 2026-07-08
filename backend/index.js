@@ -1,18 +1,19 @@
 require("dotenv").config();
-const express = require('express');
-const cors = require('cors');
-const http = require('http');
-const { Server } = require('socket.io');
-const jwt = require('jsonwebtoken');
+
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const connectToDatabase = require('./db');
+const connectToDatabase = require("./db");
 
-const userRoutes = require('./routes/userRoutes');
-const canvasRoutes = require('./routes/canvasroutes');
+const userRoutes = require("./routes/userRoutes");
+const canvasRoutes = require("./routes/canvasroutes");
 
-const Canvas = require('./models/canvasModel');
+const Canvas = require("./models/canvasModel");
 
 const app = express();
 
@@ -21,8 +22,8 @@ connectToDatabase();
 app.use(cors());
 app.use(express.json());
 
-app.use('/users', userRoutes);
-app.use('/canvas', canvasRoutes);
+app.use("/users", userRoutes);
+app.use("/canvas", canvasRoutes);
 
 const server = http.createServer(app);
 
@@ -38,8 +39,6 @@ io.on("connection", (socket) => {
 
     socket.on("joinCanvas", async ({ canvasId }) => {
 
-        console.log("Someone is trying to join canvas:", canvasId);
-
         try {
 
             const authHeader = socket.handshake.headers.authorization;
@@ -51,6 +50,7 @@ io.on("connection", (socket) => {
                 });
 
                 return;
+
             }
 
             const token = authHeader.split(" ")[1];
@@ -59,18 +59,13 @@ io.on("connection", (socket) => {
 
             const email = decoded.email;
 
-            // Join the room
             socket.join(canvasId);
 
-            console.log(`${socket.id} joined canvas ${canvasId}`);
+            console.log(`${socket.id} joined ${canvasId}`);
 
-            // Load the canvas
             const canvasData = await Canvas.loadCanvas(email, canvasId);
 
-            // Send the current canvas to this client
             socket.emit("loadCanvas", canvasData);
-
-            console.log("Canvas sent successfully");
 
         } catch (error) {
 
@@ -84,18 +79,25 @@ io.on("connection", (socket) => {
 
     });
 
+    // ✅ Synchronize the whole canvas
     socket.on("drawingUpdate", async ({ canvasId, elements }) => {
 
         try {
 
             await Canvas.findByIdAndUpdate(
                 canvasId,
-                { elements },
-                { returnDocument: "after" }
+                {
+                    elements,
+                },
+                {
+                    returnDocument: "after",
+                }
             );
 
-            // Broadcast to everyone else in the room
-            socket.to(canvasId).emit("receiveDrawingUpdate", elements);
+            socket.to(canvasId).emit(
+                "receiveDrawingUpdate",
+                elements
+            );
 
         } catch (error) {
 
@@ -106,11 +108,17 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
+
         console.log("User disconnected:", socket.id);
+
     });
 
 });
 
-server.listen(3030, () => {
-    console.log("Server is running on http://localhost:3030");
+const PORT = process.env.PORT || 3030;
+
+server.listen(PORT, () => {
+
+    console.log(`Server is running on port ${PORT}`);
+
 });

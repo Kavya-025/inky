@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useReducer, useRef } from "react";
 import boardContext from "./board-context";
 import { BOARD_ACTIONS, TOOL_ACTION_TYPES, TOOL_ITEMS } from "../constants";
 import {
@@ -210,6 +210,8 @@ const BoardProvider = ({ children, initialElements = [] }) => {
         initialBoardState
     );
 
+    const remoteUpdateRef = useRef(false);
+
     const handleToolItemClick = (tool) => {
         dispatchBoardAction({
             type: BOARD_ACTIONS.CHANGE_TOOL,
@@ -310,13 +312,17 @@ const BoardProvider = ({ children, initialElements = [] }) => {
 
     // ⭐ NEW FUNCTION
     const setElements = useCallback((elements) => {
-        dispatchBoardAction({
-            type: BOARD_ACTIONS.SET_ELEMENTS,
-            payload: {
-                elements,
-            },
-        });
-    }, []);
+
+    remoteUpdateRef.current = true;
+
+    dispatchBoardAction({
+        type: BOARD_ACTIONS.SET_ELEMENTS,
+        payload: {
+            elements,
+        },
+    });
+
+}, []);
 
     const boardContextValue = {
         ActiveToolItem: boardState.ActiveToolItem,
@@ -330,6 +336,7 @@ const BoardProvider = ({ children, initialElements = [] }) => {
         undo: boardUndoHandler,
         redo: boardRedoHandler,
         setElements, // ⭐ NEW
+        remoteUpdateRef,
     };
 
     return (
