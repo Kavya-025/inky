@@ -167,14 +167,7 @@ Database:
 ---
 
 ## 📚 Future Improvements
-
-- Undo/Redo functionality
-- Image upload support
-- Sticky notes
-- Text tool
-- Canvas export as PNG/PDF
 - Cursor presence for collaborators
-- Role-based collaboration permissions
 
 ---
 ## Live At
