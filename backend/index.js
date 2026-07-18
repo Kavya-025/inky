@@ -13,7 +13,7 @@ const connectToDatabase = require("./db");
 const userRoutes = require("./routes/userRoutes");
 const canvasRoutes = require("./routes/canvasroutes");
 
-const Canvas = require("./models/canvasModel");
+const Canvas = require("./models/CanvasModel");
 
 const app = express();
 

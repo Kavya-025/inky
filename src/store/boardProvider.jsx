@@ -187,8 +187,6 @@ const boardReducer = (state, action) => {
             return {
                 ...state,
                 elements: action.payload.elements,
-                history: [...state.history, action.payload.elements],
-                index: state.index + 1,
             };
 
         default:
