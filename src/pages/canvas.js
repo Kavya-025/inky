@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import API_URL from "../config";
 
 import Board from "../components/Board";
 import Toolbar from "../components/toolbar";
@@ -55,7 +56,7 @@ function CanvasPage() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:3030/canvas/load/${id}`,
+                    `${API_URL}/canvas/load/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

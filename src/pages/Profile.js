@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
+import API_URL from "../config";
 
 function Profile() {
 
@@ -27,7 +28,7 @@ function Profile() {
         };
 
         // Fetch profile
-        fetch("http://localhost:3030/users/profile", {
+        fetch(`${API_URL}/users/profile`, {
             headers
         })
         .then(async (res) => {
@@ -49,7 +50,7 @@ function Profile() {
         });
 
         // Fetch canvases
-        fetch("http://localhost:3030/canvas", {
+        fetch(`${API_URL}/canvas`, {
             headers
         })
         .then(async (res) => {
@@ -78,7 +79,7 @@ function Profile() {
 
         try {
 
-            const response = await fetch("http://localhost:3030/canvas", {
+            const response = await fetch(`${API_URL}/canvas`, {
 
                 method: "POST",
 
@@ -120,7 +121,7 @@ function Profile() {
         try {
 
             const response = await fetch(
-                `http://localhost:3030/canvas/share/${selectedCanvasId}`,
+                `${API_URL}/canvas/share/${selectedCanvasId}`,
                 {
                     method: "PUT",
                     headers: {
