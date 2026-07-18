@@ -41,19 +41,14 @@ io.on("connection", (socket) => {
 
         try {
 
-            const authHeader = socket.handshake.headers.authorization;
+            const token = socket.handshake.auth.token;
 
-            if (!authHeader || !authHeader.startsWith("Bearer ")) {
-
+            if (!token) {
                 socket.emit("unauthorized", {
                     message: "Access denied. No token provided.",
                 });
-
                 return;
-
             }
-
-            const token = authHeader.split(" ")[1];
 
             const decoded = jwt.verify(token, JWT_SECRET);
 

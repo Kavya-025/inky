@@ -72,6 +72,10 @@ function CanvasPage() {
 
                 setCanvas(canvasData);
 
+                socket.auth = {
+                    token: localStorage.getItem("token"),
+                };
+
                 if (!socket.connected) {
                     socket.connect();
                 }
